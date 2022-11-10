@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExpenseBook.com</title>
+  <style>
+    .user-inputs_container {
+      padding: 5rem 2rem;
+      display: grid;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .user-inputs {
+      padding: 0.5rem 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      padding: .25rem;
+      text-transform: uppercase;
+    }
+
+    .information-table {
+      display: flex;
+      justify-content: center;
+    }
+
+    .information-table table {
+      width: 100%;
+      text-align: center;
+    }
+
+    .submit-btn--of_event {
+      padding: .5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="user-inputs_container">
+    <!-- user inputs -->
+    <input placeholder="type of event" type="text" class="type-of_event user-inputs">
+    <input placeholder="date of event" type="date" class="date-of_event user-inputs">
+    <input placeholder="cost of event" type="number" class="cost-of_event user-inputs">
+    <input placeholder="status of event" type="text" class="status-of_event user-inputs">
+    <button class="submit-btn--of_event">Submit Entry</button>
+    <!-- user inputs -->
+  </div>
+
+  <div class="information-table">
+    <table class="info-table">
+      <tr>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Cost</th>
+        <th>Status</th>
+      </tr>
+      <!-- <tr>
+        <td>gym</td>
+        <td>20/01/2022</td>
+        <td>1300</td>
+        <td>paid</td>
+      </tr> -->
+    </table>
+  </div>
+
+  <script>
+    const eventType = document.querySelector('.type-of_event')
+    const eventDate = document.querySelector('.date-of_event')
+    const eventCost = document.querySelector('.cost-of_event')
+    const eventStatus = document.querySelector('.status-of_event')
+    const submitEventBtn = document.querySelector('.submit-btn--of_event')
+    const infoTable = document.querySelector('.info-table')
+
+    // storing user data into object
+
+    const state = JSON.parse(localStorage.getItem("entry")) || [];
+
+    // saving inputs data into localStorage
+    submitEventBtn.addEventListener('click', function () {
+      if (eventType.value == '' || eventDate.value == '' || eventCost.value == '' || eventStatus.value == '') {
+        alert('please fill all the fields!')
+      }
+      else {
+        state.push([eventType.value, eventDate.value, eventCost.value, eventStatus.value])
+        localStorage.setItem("entry", JSON.stringify(state))
+        window.location.reload()
+      }
+    })
+
+    state.forEach(entry => {
+      function RowGenerator([Category, date, amount, status]) {
+        console.log(Category, date, amount, status)
+        const virtualRow = document.createElement('tr')
+        virtualRow.innerHTML = `
+      <td>${Category}</td>
+      <td>${date}</td>
+      <td>${amount}</td>
+      <td>${status}</td>`
+        infoTable.appendChild(virtualRow)
+      }
+      RowGenerator(entry)
+    })
+  </script>
+</body>
+
+</html>
